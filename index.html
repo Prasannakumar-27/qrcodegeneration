@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            color: #fff;
+            padding: 50px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        input {
+            padding: 12px 20px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 2px solid #fff;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1cc88a;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 8px;
+            background-color: #1cc88a;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #17a673;
+        }
+
+        button:active {
+            background-color: #159e62;
+        }
+
+        #qrcode {
+            margin-top: 30px;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .error-message {
+            color: #ff4747;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            input, button {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>QR Code Generator</h1>
+    <input type="text" id="urlInput" placeholder="Enter URL or Text" />
+    <button onclick="generateQRCode()">Generate QR Code</button>
+    
+    <div id="qrcode"></div>
+    <p id="errorMessage" class="error-message" style="display: none;"></p>
+
+    <script>
+        function generateQRCode() {
+            const url = document.getElementById('urlInput').value.trim();
+            const qrcodeContainer = document.getElementById('qrcode');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Clear previous QR code and error message (if any)
+            qrcodeContainer.innerHTML = '';
+            errorMessage.style.display = 'none';
+            
+            if (url) {
+                // Generate the QR code
+                QRCode.toCanvas(url, { width: 250, color: { dark: '#000000', light: '#ffffff' } }, function (error, canvas) {
+                    if (error) {
+                        console.error(error);
+                        alert("Failed to generate QR code");
+                    } else {
+                        // Append the canvas to the qrcode div and make it visible
+                        qrcodeContainer.style.display = 'block';
+                        qrcodeContainer.appendChild(canvas);
+                    }
+                });
+            } else {
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Please enter a valid URL or text to generate a QR code.';
+            }
+        }
+    </script>
+
+</body>
+</html>
